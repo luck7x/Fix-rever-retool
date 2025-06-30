@@ -69,19 +69,23 @@ const RETOOL_ACCOUNTS = [
 #### 📋 详细步骤：
 1. **登录你的 Retool 账户**
 2. **打开浏览器开发者工具**（按 F12）
-3. **切换到 "Network"（网络）标签页**
+3. **切换到 "应用"标签页**
 4. **在 Retool 页面中刷新页面**
-5. **找到任意一个发送到你域名的请求**
-6. **点击请求查看详情**
+5. **找到cookie**
+6. **找到任意一个发送到你域名的请求**
 7. **复制以下信息：**
    - **域名：** 从地址栏获取（如：`mycompany.retool.com`）
-   - **x-xsrf-token：** 在 Request Headers 中查找
-   - **accessToken：** 在 Cookie 中查找 `accessToken=` 后的值
+   - **x-xsrf-token：** 
+   - **accessToken：** 
 
 ### 第4步：部署
 1. 点击 "Save and Deploy"
 2. 等待部署完成
 3. 获得 Worker URL：`https://your-worker-name.your-username.workers.dev`
+
+### 第5步：使用
+URL：https://your-worker-name.your-username.workers.dev
+密钥：“SK-demo-xxx”  
 
 ## 📡 API 端点
 
@@ -170,89 +174,7 @@ GET https://your-worker.workers.dev/debug?enable=false
 }
 ```
 
-## 🔧 使用示例
 
-### JavaScript/Node.js
-```javascript
-const response = await fetch('https://your-worker.workers.dev/v1/chat/completions', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer sk-your-key-123456',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    model: 'claude-3-sonnet',
-    messages: [
-      { role: 'user', content: 'Hello!' }
-    ]
-  })
-});
-
-const data = await response.json();
-console.log(data.choices[0].message.content);
-```
-
-### Python
-```python
-import requests
-
-response = requests.post(
-    'https://your-worker.workers.dev/v1/chat/completions',
-    headers={
-        'Authorization': 'Bearer sk-your-key-123456',
-        'Content-Type': 'application/json',
-    },
-    json={
-        'model': 'claude-3-sonnet',
-        'messages': [
-            {'role': 'user', 'content': 'Hello!'}
-        ]
-    }
-)
-
-data = response.json()
-print(data['choices'][0]['message']['content'])
-```
-
-### cURL
-```bash
-curl -X POST https://your-worker.workers.dev/v1/chat/completions \
-  -H "Authorization: Bearer sk-your-key-123456" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "claude-3-sonnet",
-    "messages": [
-      {"role": "user", "content": "Hello!"}
-    ]
-  }'
-```
-
-## ❗ 常见问题
-
-### Q: 为什么 `/models` 返回空数组？
-**A:** 检查以下几点：
-1. Retool 认证信息是否正确
-2. Retool 账户中是否创建了 AI Agents
-3. 访问 `/debug?enable=true` 查看详细错误信息
-
-### Q: 如何添加多个 Retool 账户？
-**A:** 在 `RETOOL_ACCOUNTS` 数组中添加更多对象：
-```javascript
-const RETOOL_ACCOUNTS = [
-  {
-    domain_name: "company1.retool.com",
-    x_xsrf_token: "token1",
-    accessToken: "access1",
-    // ...
-  },
-  {
-    domain_name: "company2.retool.com", 
-    x_xsrf_token: "token2",
-    accessToken: "access2",
-    // ...
-  }
-];
-```
 
 ### Q: 支持哪些模型？
 **A:** 系统会自动发现你在 Retool 中创建的所有 AI Agents 使用的模型，包括：
